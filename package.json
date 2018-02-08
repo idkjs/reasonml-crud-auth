@@ -4,6 +4,7 @@
   "license": "MIT",
   "url": "https://github.com/idkjs/reasonml-crud-auth",
   "proxy": "http://localhost:3001/",
+  "author": "Alain Armand, @_idkjs, https://github.com/idkjs",
   "keywords": [
     "reasonml",
     "reason-react",
@@ -31,7 +32,8 @@
     "prepare": "npm link bs-platform",
     "server": "node ./server/server.js",
     "server:dev": "nodemon ./server/server.js",
-    "dev": "concurrently --kill-others-on-fail \"yarn server:dev\" \"yarn start\""
+    "dev":
+      "concurrently --kill-others-on-fail \"yarn server:dev\" \"yarn start\""
   },
   "devDependencies": {
     "body-parser": "^1.18.2",

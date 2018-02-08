@@ -1,8 +1,8 @@
 {
-  "name": "reasonml-crud-companies",
+  "name": "reasonml-crud-auth",
   "version": "0.1.0",
   "license": "MIT",
-  "url": "https://github.com/idkjs/reasonml-crud-companies",
+  "url": "https://github.com/idkjs/reasonml-crud-auth",
   "proxy": "http://localhost:3001/",
   "keywords": [
     "reasonml",
@@ -29,11 +29,14 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "prepare": "npm link bs-platform",
-    "server": "node ./server/server.js"
+    "server": "node ./server/server.js",
+    "server:dev": "nodemon ./server/server.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn server:dev\" \"yarn start\""
   },
   "devDependencies": {
     "body-parser": "^1.18.2",
     "bs-jest": "^0.3.2",
+    "concurrently": "^3.5.1",
     "express": "^4.16.2",
     "lokijs": "^1.5.2",
     "reason-react": "^0.3.2"

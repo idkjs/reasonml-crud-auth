@@ -3,13 +3,13 @@ exception CannotCreateLinkToNotFound;
 let component = ReasonReact.statelessComponent("Link");
 
 let make = (~route: Routes.t, ~className=?, children) => {
-  let isModifiedEvent = (event: ReactEventRe.Mouse.t) =>
-    ReactEventRe.Mouse.metaKey(event)
-    || ReactEventRe.Mouse.altKey(event)
-    || ReactEventRe.Mouse.ctrlKey(event)
-    || ReactEventRe.Mouse.shiftKey(event);
-  let isLinkEvent = (event: ReactEventRe.Mouse.t) =>
-    ReactEventRe.Mouse.button(event)
+  let isModifiedEvent = (event: ReactEvent.Mouse.t) =>
+    ReactEvent.Mouse.metaKey(event)
+    || ReactEvent.Mouse.altKey(event)
+    || ReactEvent.Mouse.ctrlKey(event)
+    || ReactEvent.Mouse.shiftKey(event);
+  let isLinkEvent = (event: ReactEvent.Mouse.t) =>
+    ReactEvent.Mouse.button(event)
     == 0 /* ignore everything but left clicks */
     && ! isModifiedEvent(event); /* ignore clicks with modifier keys */
   {
@@ -22,9 +22,9 @@ let make = (~route: Routes.t, ~className=?, children) => {
         | Company(id) => Routes.Company.url(id)
         | NotFound => raise(CannotCreateLinkToNotFound)
         };
-      let handleClick = (event: ReactEventRe.Mouse.t) =>
+      let handleClick = (event: ReactEvent.Mouse.t) =>
         if (isLinkEvent(event)) {
-          ReactEventRe.Mouse.preventDefault(event);
+          ReactEvent.Mouse.preventDefault(event);
           ReasonReact.Router.push(url);
         };
       ReasonReact.createDomElement(

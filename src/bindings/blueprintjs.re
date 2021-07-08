@@ -105,7 +105,7 @@ module Button = {
         ~iconName: option(string)=?,
         ~intent: option(Intent.t)=?,
         ~loading: option(bool)=?,
-        ~onClick: option(ReasonReact.Callback.t(ReactEventRe.Mouse.t))=?,
+        ~onClick: option(ReasonReact.Callback.t(ReactEvent.Mouse.t))=?,
         ~rightIconName: option(string)=?,
         ~text: option(string)=?,
         ~buttonType: option(ButtonType.t)=?,
@@ -145,14 +145,14 @@ module Tabs = {
   type onChangeEvent = {
     newTab: string,
     oldTab: string,
-    event: ReactEventRe.Mouse.t
+    event: ReactEvent.Mouse.t
   };
   let make =
       (
         ~animate: option(bool)=?,
         ~className: option(string)=?,
         ~id: string,
-        ~onChange: option(((string, string, ReactEventRe.Mouse.t) => unit))=?,
+        ~onChange: option(((string, string, ReactEvent.Mouse.t) => unit))=?,
         children
       ) =>
     ReasonReact.wrapJsForReason(
@@ -174,7 +174,7 @@ module Tab = {
         ~className: option(string)=?,
         ~id: string,
         ~title: option(string)=?,
-        ~panel: option(ReasonReact.reactElement)=?,
+        ~panel: option(React.element)=?,
         children
       ) =>
     ReasonReact.wrapJsForReason(
@@ -207,8 +207,8 @@ module Dialog = {
         ~isCloseButtonShown: option(bool)=?,
         ~_lazy: option(bool)=?,
         ~onClose: option(ReasonReact.Callback.t('t))=?,
-        ~style: option(ReactDOMRe.style)=?,
-        ~title: option(ReasonReact.reactElement)=?, /* TODO: can be also string */
+        ~style: option(ReactDOM.style)=?,
+        ~title: option(React.element)=?, /* TODO: can be also string */
         ~transitionDuration: option(int)=?,
         ~transitionName: option(string)=?,
         children
@@ -249,7 +249,7 @@ module Label = {
         ~text: string,
         ~className: option(string)=?,
         ~disabled: option(bool)=?,
-        ~helperText: option(ReasonReact.reactElement)=?,
+        ~helperText: option(React.element)=?,
         ~required: option(bool)=?,
         children
       ) =>
@@ -272,12 +272,12 @@ module FormGroup = {
       (
         ~className: option(string)=?,
         ~disabled: option(bool)=?,
-        ~helperText: option(ReasonReact.reactElement)=?,
+        ~helperText: option(React.element)=?,
         ~inline: option(bool)=?,
         ~intent: option(Intent.t)=?,
-        ~label: option(ReasonReact.reactElement)=?,
+        ~label: option(React.element)=?,
         ~labelFor: option(string)=?,
-        ~requiredLabel: option([ | `Bool(bool) | `Element(ReasonReact.reactElement)])=?,
+        ~requiredLabel: option([ | `Bool(bool) | `Element(React.element)])=?,
         ~required: option(bool)=?,
         children
       ) =>
@@ -306,12 +306,12 @@ module InputGroup = {
         ~className: option(string)=?,
         ~defaultValue: option(string)=?,
         ~disabled: option(bool)=?,
-        ~inputRef: option(ReasonReact.reactElement)=?,
+        ~inputRef: option(React.element)=?,
         ~intent: option(Intent.t)=?,
         ~leftIconName: option(string)=?,
         ~onChange: option(ReasonReact.Callback.t('t))=?,
         ~placeholder: option(string)=?,
-        ~rightElement: option(ReasonReact.reactElement)=?,
+        ~rightElement: option(React.element)=?,
         ~_type: option(string)=?,
         ~value: option(string)=?,
         children
@@ -389,9 +389,9 @@ module Position = {
     | Some(position) => Js.Undefined.return(toInt(position))
     | None => Js.Undefined.empty
     };
-  [@bs.module "@blueprintjs/core"] external isPositionHorizontal : t => Js.boolean =
+  [@bs.module "@blueprintjs/core"] external isPositionHorizontal : t => bool =
     "isPositionHorizontal";
-  [@bs.module "@blueprintjs/core"] external isPositionVertical : t => Js.boolean =
+  [@bs.module "@blueprintjs/core"] external isPositionVertical : t => bool =
     "isPositionVertical";
 };
 
@@ -408,7 +408,7 @@ module ActionProps = {
     "iconName": option(string),  /* TODO - define IconName type */
 
     /** Click event handler. */
-    "onClick": option(ReasonReact.Callback.t(ReactEventRe.Mouse.t)),
+    "onClick": option(ReasonReact.Callback.t(ReactEvent.Mouse.t)),
     
     /** Action text. */
     "text": option(string),
@@ -439,7 +439,7 @@ module ToastProps = {
     "intent": Js.Nullable.t(int),
     
       /** Message to display in the body of the toast. */
-    "message": ReasonReact.reactElement,
+    "message": React.element,
 
       /**
        * Callback invoked when the toast is dismissed, either by the user or by the timeout.
@@ -457,7 +457,7 @@ module ToastProps = {
 
   let create = 
         (
-          ~message: ReasonReact.reactElement, 
+          ~message: React.element, 
           ~action: option(ActionProps.t)=?,
           ~intent: option(Intent.t)=?,
           ~iconName: option(string)=?, 
@@ -504,10 +504,10 @@ module IToaster = {
 module ToasterProps = {
   type t = {
     .
-    "autoFocus": Js.Nullable.t(Js.boolean),
-    "canEscapeKeyClear": Js.Nullable.t(Js.boolean),
+    "autoFocus": Js.Nullable.t(bool),
+    "canEscapeKeyClear": Js.Nullable.t(bool),
     "className": Js.Nullable.t(string),
-    "inline": Js.Nullable.t(Js.boolean),
+    "inline": Js.Nullable.t(bool),
     "position": Js.Nullable.t(int)
   };
   let create = 

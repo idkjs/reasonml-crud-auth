@@ -4,10 +4,10 @@ requireCSS("./app.css");
 
 let logo = requireAssetURI("./logo.svg");
 
-type state = {mainContent: ReasonReact.reactElement};
+type state = {mainContent: React.element};
 
 type action =
-  | MainContentChanged(ReasonReact.reactElement);
+  | MainContentChanged(React.element);
 
 let component = ReasonReact.reducerComponent("App");
 
@@ -41,7 +41,7 @@ let make = _children => {
     </div>,
   reducer: (action, _state) =>
     switch action {
-    | MainContentChanged(el) => ReasonReact.Update({mainContent: el})
+    | MainContentChanged(el) => Update({mainContent: el})
     },
   subscriptions: self => [
     Sub(

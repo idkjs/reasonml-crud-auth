@@ -4,4 +4,4 @@ requireCSS("./index.css");
 
 registerServiceWorker();
 
-ReactDOMRe.renderToElementWithId(<App />, "root");
+ReactDOM.renderToElementWithId(<App />, "root");

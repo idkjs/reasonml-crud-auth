@@ -8,17 +8,17 @@
 
 [@bs.module "./registerServiceWorker"] external registerServiceWorker : unit => unit = "default";
 
-let intEl = (n) => n |> string_of_int |> ReasonReact.stringToElement;
+let intEl = (n) => n |> string_of_int |> React.string;
 
 let optIntEl = (n) =>
   switch n {
   | Some(n) => intEl(n)
-  | None => ReasonReact.nullElement
+  | None => ReasonReact.null
   };
 
-let textEl = ReasonReact.stringToElement;
+let textEl = React.string;
 
-let arrayEl = ReasonReact.arrayToElement;
+let arrayEl = React.array;
 
 let boolEl = (n: bool) => n ? textEl("true") : textEl("false");
 
@@ -38,8 +38,8 @@ let optIntOrRaise = (n) : int =>
 
 /* gets value from from element event. EG:
    <input onChange=(reduce((event) => Changed(getValueFromEvent(event))))/> */
-let getValueFromEvent = (event) : string => ReactDOMRe.domElementToObj(
-                                              ReactEventRe.Form.target(event)
+let getValueFromEvent = (event) : string => ReactDOM.domElementToObj(
+                                              ReactEvent.Form.target(event)
                                             )##value;
 
 let optToArrayOrEmpty = (x) =>

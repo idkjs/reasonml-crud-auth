@@ -22,7 +22,7 @@ let make = (~id, _children) => {
       let companyContent =
         switch self.state.company {
         | Some(company) => renderCompany(company)
-        | None => ReasonReact.stringToElement("Loading company")
+        | None => React.string("Loading company")
         };
       <div>
         <div className="margin-bottom-lg">
@@ -49,11 +49,11 @@ let make = (~id, _children) => {
            })
         |> ignore
       );
-      ReasonReact.NoUpdate;
+      NoUpdate;
     },
     reducer: (action, _state) =>
       switch action {
-      | Loaded(company) => ReasonReact.Update({company: Some(company)})
+      | Loaded(company) => Update({company: Some(company)})
       }
   };
 };

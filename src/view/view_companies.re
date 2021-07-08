@@ -30,7 +30,7 @@ module CompanyDialog = {
         }
       },
     render: self => {
-      let internalSubmit = (evt: ReactEventRe.Mouse.t) => {
+      let internalSubmit = (evt: ReactEvent.Mouse.t) => {
         let trimmed: string = String.trim(self.state.company.name);
         if (String.length(trimmed) > 0) {
           onSubmit(self.state.company);
@@ -51,7 +51,7 @@ module CompanyDialog = {
           inline=true
           helperText=(
             self.state.hasError ?
-              textEl("Enter valid company name") : ReasonReact.nullElement
+              textEl("Enter valid company name") : ReasonReact.null
           )
           required=true>
           <Blueprintjs.InputGroup
@@ -84,14 +84,14 @@ module CompanyDialog = {
       | Changed(name) =>
         let hasError =
           state.hasError && String.length(String.trim(name)) === 0;
-        ReasonReact.Update({
+        Update({
           hasError,
           company: {
             ...state.company,
             name
           }
         });
-      | SetError(hasError) => ReasonReact.Update({...state, hasError})
+      | SetError(hasError) => Update({...state, hasError})
       }
   };
 };
@@ -182,7 +182,7 @@ let make = _children => {
          })
       |> ignore
     );
-    ReasonReact.NoUpdate;
+    NoUpdate;
   };
   let handleEdit = (company, handleCompanyEdited) =>
     Js.Promise.(
@@ -243,7 +243,7 @@ let make = _children => {
          })
       |> ignore
     );
-    ReasonReact.NoUpdate;
+    NoUpdate;
   };
   /**
    * Implementation for the View_companies React component
@@ -291,7 +291,7 @@ let make = _children => {
                   (textEl("Add company"))
                 </Blueprintjs.Button>
               </div> :
-              ReasonReact.nullElement
+              ReasonReact.null
           )
           <div> companiesContent </div>
           <Blueprintjs.Dialog
@@ -321,28 +321,28 @@ let make = _children => {
     reducer: (action, state) =>
       switch action {
       | Loaded(companies) =>
-        ReasonReact.Update({
+        Update({
           ...state,
           hasLoadError: false,
           companies: Some(companies)
         })
-      | LoadError => ReasonReact.Update({...state, hasLoadError: true})
+      | LoadError => Update({...state, hasLoadError: true})
       | ToggleAddDialog =>
-        ReasonReact.Update({...state, addDialogOpen: ! state.addDialogOpen})
+        Update({...state, addDialogOpen: ! state.addDialogOpen})
       | ToggleEditDialog(editCompany) =>
-        ReasonReact.Update({...state, editCompany})
+        Update({...state, editCompany})
       | AddCompany(company) =>
-        ReasonReact.Update({
+        Update({
           ...state,
           companies: Company.append(state.companies, company)
         })
       | EditCompany(company) =>
-        ReasonReact.Update({
+        Update({
           ...state,
           companies: Company.replace(state.companies, company)
         })
       | RemoveCompany(removedId) =>
-        ReasonReact.Update({
+        Update({
           ...state,
           companies: Company.removeWithId(state.companies, removedId)
         })

@@ -7,20 +7,20 @@ type state = {company: option(Company.t)};
 type action =
   | Loaded(Company.t);
 
-let component = ReasonReact.reducerComponent("Company");
+[@react.component]("Company");
 
-let make = (~id, _children) => {
+let make = (~id, ()) => {
   let renderCompany = (company: Company.t) =>
     <div className="margin-left-md">
       <p> <strong> (textEl("ID: ")) </strong> (optIntEl(company.id)) </p>
       <p> <strong> (textEl("Name: ")) </strong> (textEl(company.name)) </p>
     </div>;
   {
-    ...component,
+     
     initialState: () => {company: None},
     render: self => {
       let companyContent =
-        switch self.state.company {
+        switch state.company {
         | Some(company) => renderCompany(company)
         | None => React.string("Loading company")
         };

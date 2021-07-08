@@ -1,10 +1,10 @@
 open Utils;
 
-let component = ReasonReact.statelessComponent("Home");
+[@react.component]("Home");
 
-let make = _children => {
-  ...component,
-  render: _self =>
+let make = () => {
+   
+   
     <div>
       <h1 className="margin-bottom-xl"> (textEl("Home")) </h1>
       <p> (textEl("This is REASONML CRUD example.")) </p>

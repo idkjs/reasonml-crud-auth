@@ -9,10 +9,10 @@ type state = {mainContent: React.element};
 type action =
   | MainContentChanged(React.element);
 
-let component = ReasonReact.reducerComponent("App");
+[@react.component]("App");
 
-let make = _children => {
-  ...component,
+let make = () => {
+   
   initialState: () => {mainContent: Router.getInitialPage()},
   render: self =>
     <div className="app">
@@ -37,7 +37,7 @@ let make = _children => {
           <Blueprintjs.Button className="pt-minimal" iconName="cog" />
         </Blueprintjs.NavbarGroup>
       </Blueprintjs.Navbar>
-      <div className="app-content"> self.state.mainContent </div>
+      <div className="app-content"> state.mainContent </div>
     </div>,
   reducer: (action, _state) =>
     switch action {

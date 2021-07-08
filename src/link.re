@@ -1,8 +1,8 @@
 exception CannotCreateLinkToNotFound;
 
-let component = ReasonReact.statelessComponent("Link");
+[@react.component]("Link");
 
-let make = (~route: Routes.t, ~className=?, children) => {
+let make = (~route: Routes.t, ~className=?, ~children) => {
   let isModifiedEvent = (event: ReactEvent.Mouse.t) =>
     ReactEvent.Mouse.metaKey(event)
     || ReactEvent.Mouse.altKey(event)
@@ -13,8 +13,8 @@ let make = (~route: Routes.t, ~className=?, children) => {
     == 0 /* ignore everything but left clicks */
     && ! isModifiedEvent(event); /* ignore clicks with modifier keys */
   {
-    ...component,
-    render: _self => {
+     
+      {
       let url =
         switch route {
         | Home => Routes.Home.url()

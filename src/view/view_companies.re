@@ -15,9 +15,9 @@ module CompanyDialog = {
   type action =
     | Changed(string)
     | SetError(bool);
-  let component = ReasonReact.reducerComponent("CompanyDialog");
+  [@react.component]("CompanyDialog");
   let make = (~onSubmit, ~onClose, ~data: option(Company.t)=None, _) => {
-    ...component,
+     
     initialState: () =>
       switch data {
       | Some(company) => {company, hasError: false}
@@ -31,16 +31,16 @@ module CompanyDialog = {
       },
     render: self => {
       let internalSubmit = (evt: ReactEvent.Mouse.t) => {
-        let trimmed: string = String.trim(self.state.company.name);
+        let trimmed: string = String.trim(state.company.name);
         if (String.length(trimmed) > 0) {
-          onSubmit(self.state.company);
+          onSubmit(state.company);
           onClose(evt);
         } else {
           self.send(SetError(true));
         };
       };
       let intent =
-        self.state.hasError ?
+        state.hasError ?
           Blueprintjs.Intent.DANGER : Blueprintjs.Intent.NONE;
       <div className="dialog-container">
         <Blueprintjs.FormGroup
@@ -50,7 +50,7 @@ module CompanyDialog = {
           intent
           inline=true
           helperText=(
-            self.state.hasError ?
+            state.hasError ?
               textEl("Enter valid company name") : ReasonReact.null
           )
           required=true>
@@ -58,7 +58,7 @@ module CompanyDialog = {
             _type="text"
             id="company-name-input"
             intent
-            value=self.state.company.name
+            value=state.company.name
             placeholder="Enter company name..."
             onChange=(event => self.send(Changed(getValueFromEvent(event))))
           />
@@ -115,9 +115,9 @@ type action =
   | ToggleAddDialog
   | ToggleEditDialog(option(Company.t));
 
-let component = ReasonReact.reducerComponent("Companies");
+[@react.component]("Companies");
 
-let make = _children => {
+let make = () => {
   /**
    * "Private" functions are introduced first
    */
@@ -249,7 +249,7 @@ let make = _children => {
    * Implementation for the View_companies React component
    */
   {
-    ...component,
+     
     initialState: () => {
       companies: None,
       addDialogOpen: false,
@@ -269,12 +269,12 @@ let make = _children => {
       let editCompany = company =>
         handleEdit(company, company => self.send(EditCompany(company)));
       let companiesContent =
-        switch self.state.companies {
+        switch state.companies {
         | Some(companies) =>
           renderCompanies(companies, removeCompany, openEditDialog)
         | None => renderLoading()
         };
-      self.state.hasLoadError ?
+      state.hasLoadError ?
         <h2 className="pt-running-text">
           (
             textEl(
@@ -285,7 +285,7 @@ let make = _children => {
         <div>
           <h1 className="pt-running-text"> (textEl("Companies")) </h1>
           (
-            self.state.companies != None ?
+            state.companies != None ?
               <div>
                 <Blueprintjs.Button onClick=toggleAddDialog>
                   (textEl("Add company"))
@@ -295,19 +295,19 @@ let make = _children => {
           )
           <div> companiesContent </div>
           <Blueprintjs.Dialog
-            isOpen=self.state.addDialogOpen
+            isOpen=state.addDialogOpen
             onClose=toggleAddDialog
             title=(textEl("Add new company"))>
             <CompanyDialog onSubmit=addCompany onClose=toggleAddDialog />
           </Blueprintjs.Dialog>
           <Blueprintjs.Dialog
-            isOpen=(self.state.editCompany !== None)
+            isOpen=(state.editCompany !== None)
             onClose=closeEditDialog
             title=(textEl("Edit company"))>
             <CompanyDialog
               onSubmit=editCompany
               onClose=closeEditDialog
-              data=self.state.editCompany
+              data=state.editCompany
             />
           </Blueprintjs.Dialog>
         </div>;

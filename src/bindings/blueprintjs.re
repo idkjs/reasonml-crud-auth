@@ -63,7 +63,7 @@ module ButtonType = {
 
 module Navbar = {
   [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "Navbar";
-  let make = (~className: option(string)=?, children) =>
+  let make = (~className: option(string)=?, ~children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass,
       ~props={"className": Js.Nullable.from_opt(className)},
@@ -73,7 +73,7 @@ module Navbar = {
 
 module NavbarGroup = {
   [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "NavbarGroup";
-  let make = (~className: option(string)=?, ~align: option(NavbarAlign.t)=?, children) =>
+  let make = (~className: option(string)=?, ~align: option(NavbarAlign.t)=?, ~children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass,
       ~props={
@@ -86,7 +86,7 @@ module NavbarGroup = {
 
 module NavbarHeading = {
   [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "NavbarHeading";
-  let make = (~className: option(string)=?, children) =>
+  let make = (~className: option(string)=?, ~children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass,
       ~props={"className": Js.Nullable.from_opt(className)},
@@ -132,7 +132,7 @@ module Button = {
 
 module NavbarDivider = {
   [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "NavbarDivider";
-  let make = (~className: option(string)=?, children) =>
+  let make = (~className: option(string)=?, ~children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass,
       ~props={"className": Js.Nullable.from_opt(className)},

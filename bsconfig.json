@@ -6,16 +6,14 @@
       "subdirs": true
     }
   ],
-  "bs-dependencies": [
-    "@rescript/react",
-    "@glennsl/bs-jest",
-    "@glennsl/bs-json",
-    "bs-fetch"
-  ],
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
+  "bs-dependencies": [ "@rescript/react", "@glennsl/bs-jest", "@glennsl/bs-json", "bs-fetch" ],
   "reason": {
     "react-jsx": 3
   },
-  "bsc-flags": [
-    "-bs-super-errors"
-  ]
+  "bsc-flags": [ "-bs-super-errors" ]
 }

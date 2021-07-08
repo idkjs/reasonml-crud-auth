@@ -17,6 +17,7 @@
     "reason-scripts": "1.0.0"
   },
   "scripts": {
+    "format": "find ./src -iname '*.re' | xargs bsrefmt --in-place && find ./src -iname '*.rei' | xargs bsrefmt -i true --in-place",
     "clean": "bsb -clean-world",
     "build:bs": "bsb -make-world",
     "watch": "bsb -make-world -w",

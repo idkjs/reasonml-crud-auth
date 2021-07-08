@@ -1,23 +1,23 @@
 let getPageFromPath = path => {
   let route = Routes.getRoute(path);
-  switch route {
+  switch (route) {
   | Home => <View_home />
   | Companies => <View_companies />
   | Company(id) => <View_company id />
-  | NotFound => <div> (Utils.textEl("Page not found!")) </div>
+  | NotFound => <div> {Utils.textEl("Page not found!")} </div>
   };
 };
 
 let getInitialPage = () =>
-  getPageFromPath(ReasonReactRouter.dangerouslyGetInitialUrl().path);
+  getPageFromPath(RescriptReactRouter.dangerouslyGetInitialUrl().path);
 
 let init = pageChanged => {
   let watchId =
-    ReasonReactRouter.watchUrl(url => {
+    RescriptReactRouter.watchUrl(url => {
       let page = getPageFromPath(url.path);
       pageChanged(page);
     });
   watchId;
 };
 
-let destroy = ReasonReactRouter.unwatchUrl;
+let destroy = RescriptReactRouter.unwatchUrl;

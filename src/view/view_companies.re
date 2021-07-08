@@ -10,89 +10,94 @@ requireCSS("./view_companies.css");
 module CompanyDialog = {
   type state = {
     company: Company.t,
-    hasError: bool
+    hasError: bool,
   };
   type action =
     | Changed(string)
     | SetError(bool);
-  [@react.component]("CompanyDialog");
-  let make = (~onSubmit, ~onClose, ~data: option(Company.t)=None, _) => {
-     
-    initialState: () =>
-      switch data {
-      | Some(company) => {company, hasError: false}
-      | None => {
-          company: {
-            id: None,
-            name: ""
-          },
-          hasError: false
-        }
-      },
-    render: self => {
-      let internalSubmit = (evt: ReactEvent.Mouse.t) => {
-        let trimmed: string = String.trim(state.company.name);
-        if (String.length(trimmed) > 0) {
-          onSubmit(state.company);
-          onClose(evt);
-        } else {
-          self.send(SetError(true));
-        };
-      };
-      let intent =
-        state.hasError ?
-          Blueprintjs.Intent.DANGER : Blueprintjs.Intent.NONE;
-      <div className="dialog-container">
-        <Blueprintjs.FormGroup
-          label=(textEl("Name "))
-          labelFor="company-name-input"
-          requiredLabel=(`Bool(true))
-          intent
-          inline=true
-          helperText=(
-            state.hasError ?
-              textEl("Enter valid company name") : React.null
-          )
-          required=true>
-          <Blueprintjs.InputGroup
-            _type="text"
-            id="company-name-input"
-            intent
-            value=state.company.name
-            placeholder="Enter company name..."
-            onChange=(event => self.send(Changed(getValueFromEvent(event))))
-          />
-        </Blueprintjs.FormGroup>
-        <div className="dialog-button-container">
-          <Blueprintjs.Button onClick=onClose>
-            (textEl("Cancel"))
-          </Blueprintjs.Button>
-          <Blueprintjs.Button
-            onClick=internalSubmit intent=Blueprintjs.Intent.PRIMARY>
-            (
-              switch data {
-              | Some(_c) => textEl("Edit")
-              | None => textEl("Add")
-              }
-            )
-          </Blueprintjs.Button>
-        </div>
-      </div>;
-    },
-    reducer: (action, state) =>
-      switch action {
-      | Changed(name) =>
-        let hasError =
-          state.hasError && String.length(String.trim(name)) === 0;
-        Update({
-          hasError,
-          company: {
-            ...state.company,
-            name
-          }
-        });
-      | SetError(hasError) => Update({...state, hasError})
+
+  let initialState = data =>
+    switch (data) {
+    | Some(company) => {company, hasError: false}
+    | None => {
+        company: {
+          id: None,
+          name: "",
+        },
+        hasError: false,
       }
+    };
+  [@react.component]
+  let make =
+      (
+        ~onSubmit,
+        ~onClose: React.callback(ReactEvent.Mouse.t, unit),
+        ~data: option(Company.t),
+      ) => {
+    let (state, dispatch) =
+      React.useReducer(
+        (state, action) =>
+          switch (action) {
+          | Changed(name) =>
+            let hasError =
+              state.hasError && String.length(String.trim(name)) === 0;
+            {
+              hasError,
+              company: {
+                ...state.company,
+                name,
+              },
+            };
+          | SetError(hasError) => {...state, hasError}
+          },
+        initialState(data),
+      );
+
+    let internalSubmit = (evt: ReactEvent.Mouse.t) => {
+      let trimmed: string = String.trim(state.company.name);
+      if (String.length(trimmed) > 0) {
+        onSubmit(state.company);
+        onClose(evt);
+      } else {
+        dispatch(SetError(true));
+      };
+    };
+    let intent =
+      state.hasError ? Blueprintjs.Intent.DANGER : Blueprintjs.Intent.NONE;
+
+    <div className="dialog-container">
+      <Blueprintjs.FormGroup
+        label={textEl("Name ")}
+        labelFor="company-name-input"
+        requiredLabel={`Bool(true)}
+        intent
+        inline=true
+        helperText={
+          state.hasError ? textEl("Enter valid company name") : React.null
+        }
+        required=true>
+        <Blueprintjs.InputGroup
+          _type="text"
+          id="company-name-input"
+          intent
+          value={state.company.name}
+          placeholder="Enter company name..."
+          onChange={event => dispatch(Changed(getValueFromEvent(event)))}
+        />
+      </Blueprintjs.FormGroup>
+      <div className="dialog-button-container">
+        <Blueprintjs.Button onClick=onClose>
+          {textEl("Cancel")}
+        </Blueprintjs.Button>
+        <Blueprintjs.Button
+          onClick=internalSubmit intent=Blueprintjs.Intent.PRIMARY>
+          {switch (data) {
+           | Some(_c) => textEl("Edit")
+           | None => textEl("Add")
+           }}
+        </Blueprintjs.Button>
+      </div>
+    </div>;
   };
 };
 
@@ -103,7 +108,7 @@ type state = {
   companies: option(array(Company.t)),
   addDialogOpen: bool,
   editCompany: option(Company.t),
-  hasLoadError: bool
+  hasLoadError: bool,
 };
 
 type action =
@@ -115,27 +120,58 @@ type action =
   | ToggleAddDialog
   | ToggleEditDialog(option(Company.t));
 
-[@react.component]("Companies");
-
+[@react.component]
 let make = () => {
+  let (state, dispatch) =
+    React.useReducer(
+      (state, action) =>
+        switch (action) {
+        | Loaded(companies) => {
+            ...state,
+            hasLoadError: false,
+            companies: Some(companies),
+          }
+        | LoadError => {...state, hasLoadError: true}
+        | ToggleAddDialog => {...state, addDialogOpen: !state.addDialogOpen}
+        | ToggleEditDialog(editCompany) => {...state, editCompany}
+        | AddCompany(company) => {
+            ...state,
+            companies: Company.append(state.companies, company),
+          }
+        | EditCompany(company) => {
+            ...state,
+            companies: Company.replace(state.companies, company),
+          }
+        | RemoveCompany(removedId) => {
+            ...state,
+            companies: Company.removeWithId(state.companies, removedId),
+          }
+        },
+      {
+        companies: None,
+        addDialogOpen: false,
+        editCompany: None,
+        hasLoadError: false,
+      },
+    );
   /**
    * "Private" functions are introduced first
    */
   let renderCompany = (company: Company.t, removeCompany, openEditDialog) => {
     let id = optIntOrRaise(company.id);
-    <tr className="company-table-row" key=(string_of_int(id))>
-      <td> <Link route=(Routes.Company(id))> (intEl(id)) </Link> </td>
-      <td> (textEl(company.name)) </td>
+    <tr className="company-table-row" key={string_of_int(id)}>
+      <td> <Link route={Routes.Company(id)}> {intEl(id)} </Link> </td>
+      <td> {textEl(company.name)} </td>
       <td>
         <div className="company-icon-container">
           <span
             title="Edit"
-            onClick=(_e => openEditDialog(Some(company)))
+            onClick={_e => openEditDialog(Some(company))}
             className="pt-icon-standard pt-icon-edit"
           />
           <span
             title="Remove"
-            onClick=(_e => removeCompany(company))
+            onClick={_e => removeCompany(company)}
             className="pt-icon-standard pt-icon-trash margin-left-md"
           />
         </div>
@@ -147,26 +183,24 @@ let make = () => {
     <table className="pt-table pt-striped company-table">
       <thead>
         <tr>
-          <th> (textEl("Id")) </th>
-          <th> (textEl("Name")) </th>
+          <th> {textEl("Id")} </th>
+          <th> {textEl("Name")} </th>
           <th> <div className="company-remove-icon-header" /> </th>
         </tr>
       </thead>
       <tbody>
-        (
-          arrayEl(
-            Array.map(
-              company => renderCompany(company, removeCompany, openEditDialog),
-              companies
-            )
-          )
-        )
+        {arrayEl(
+           Array.map(
+             company => renderCompany(company, removeCompany, openEditDialog),
+             companies,
+           ),
+         )}
       </tbody>
     </table>;
   let renderLoading = () =>
     <div className="align-middle">
       <Blueprintjs.Spinner className="pt-small" />
-      <span className="margin-left-md"> (textEl("Loading")) </span>
+      <span className="margin-left-md"> {textEl("Loading")} </span>
     </div>;
   let handleAdd = (company, handleCompanyAdded) => {
     Js.Promise.(
@@ -176,13 +210,14 @@ let make = () => {
            resolve();
          })
       |> catch(_err => {
-           Notify.showError("Failed to add company! Check network connection!")
+           Notify.showError(
+             "Failed to add company! Check network connection!",
+           )
            |> ignore;
            resolve();
          })
       |> ignore
     );
-    NoUpdate;
   };
   let handleEdit = (company, handleCompanyEdited) =>
     Js.Promise.(
@@ -193,7 +228,7 @@ let make = () => {
          })
       |> catch(_err => {
            Notify.showError(
-             "Failed to edit company! Check network connection!"
+             "Failed to edit company! Check network connection!",
            )
            |> ignore;
            resolve();
@@ -210,18 +245,18 @@ let make = () => {
            })
         |> catch(_err => {
              Notify.showError(
-               "Failed to delete company! Check network connection!"
+               "Failed to delete company! Check network connection!",
              )
              |> ignore;
              resolve();
            })
         |> ignore
       );
-    switch company.id {
+    switch (company.id) {
     | Some(companyId) => doRemove(companyId)
     | None =>
       Notify.showError(
-        "Internal error! Attempting to remove company without id!"
+        "Internal error! Attempting to remove company without id!",
       )
       |> ignore
     };
@@ -235,118 +270,74 @@ let make = () => {
          })
       |> catch(_err => {
            Notify.showError(
-             "Failed to fetch companies! Check network connection!"
+             "Failed to fetch companies! Check network connection!",
            )
            |> ignore;
            handleError();
            resolve();
          })
       |> ignore
+    )
+    |> ignore;
+  };
+
+  let toggleAddDialog = _event => dispatch(ToggleAddDialog);
+  let openEditDialog = company => dispatch(ToggleEditDialog(company));
+  let closeEditDialog = _event => dispatch(ToggleEditDialog(None));
+  let removeCompany = company =>
+    handleRemove(company, removedId => dispatch(RemoveCompany(removedId)));
+  let addCompany = company =>
+    handleAdd(company, company => dispatch(AddCompany(company)));
+  let editCompany = company =>
+    handleEdit(company, company => dispatch(EditCompany(company)));
+  let companiesContent =
+    switch (state.companies) {
+    | Some(companies) =>
+      renderCompanies(companies, removeCompany, openEditDialog)
+    | None => renderLoading()
+    };
+  React.useEffect0(() => {
+    fetchAll(
+      companies => dispatch(Loaded(companies)),
+      () => dispatch(LoadError),
     );
-    NoUpdate;
-  };
-  /**
-   * Implementation for the View_companies React component
-   */
-  {
-     
-    initialState: () => {
-      companies: None,
-      addDialogOpen: false,
-      editCompany: None,
-      hasLoadError: false
-    },
-    render: self => {
-      let toggleAddDialog = _event => self.send(ToggleAddDialog);
-      let openEditDialog = company => self.send(ToggleEditDialog(company));
-      let closeEditDialog = _event => self.send(ToggleEditDialog(None));
-      let removeCompany = company =>
-        handleRemove(company, removedId =>
-          self.send(RemoveCompany(removedId))
-        );
-      let addCompany = company =>
-        handleAdd(company, company => self.send(AddCompany(company)));
-      let editCompany = company =>
-        handleEdit(company, company => self.send(EditCompany(company)));
-      let companiesContent =
-        switch state.companies {
-        | Some(companies) =>
-          renderCompanies(companies, removeCompany, openEditDialog)
-        | None => renderLoading()
-        };
-      state.hasLoadError ?
-        <h2 className="pt-running-text">
-          (
-            textEl(
-              "Error loading companies! Check network connection and reload!"
-            )
-          )
-        </h2> :
-        <div>
-          <h1 className="pt-running-text"> (textEl("Companies")) </h1>
-          (
-            state.companies != None ?
-              <div>
-                <Blueprintjs.Button onClick=toggleAddDialog>
-                  (textEl("Add company"))
-                </Blueprintjs.Button>
-              </div> :
-              React.null
-          )
-          <div> companiesContent </div>
-          <Blueprintjs.Dialog
-            isOpen=state.addDialogOpen
+    None;
+  });
+  state.hasLoadError
+    ? <h2 className="pt-running-text">
+        {textEl(
+           "Error loading companies! Check network connection and reload!",
+         )}
+      </h2>
+    : <div>
+        <h1 className="pt-running-text"> {textEl("Companies")} </h1>
+        {state.companies != None
+           ? <div>
+               <Blueprintjs.Button onClick=toggleAddDialog>
+                 {textEl("Add company")}
+               </Blueprintjs.Button>
+             </div>
+           : React.null}
+        <div> companiesContent </div>
+        <Blueprintjs.Dialog
+          isOpen={state.addDialogOpen}
+          onClose=toggleAddDialog
+          title={textEl("Add new company")}>
+          <CompanyDialog
+            onSubmit=addCompany
             onClose=toggleAddDialog
-            title=(textEl("Add new company"))>
-            <CompanyDialog onSubmit=addCompany onClose=toggleAddDialog />
-          </Blueprintjs.Dialog>
-          <Blueprintjs.Dialog
-            isOpen=(state.editCompany !== None)
+            data={state.editCompany}
+          />
+        </Blueprintjs.Dialog>
+        <Blueprintjs.Dialog
+          isOpen={state.editCompany !== None}
+          onClose=closeEditDialog
+          title={textEl("Edit company")}>
+          <CompanyDialog
+            onSubmit=editCompany
             onClose=closeEditDialog
-            title=(textEl("Edit company"))>
-            <CompanyDialog
-              onSubmit=editCompany
-              onClose=closeEditDialog
-              data=state.editCompany
-            />
-          </Blueprintjs.Dialog>
-        </div>;
-    },
-    didMount: self =>
-      fetchAll(
-        companies => self.send(Loaded(companies)),
-        () => self.send(LoadError)
-      ),
-    /* This is the add dialog */
-    reducer: (action, state) =>
-      switch action {
-      | Loaded(companies) =>
-        Update({
-          ...state,
-          hasLoadError: false,
-          companies: Some(companies)
-        })
-      | LoadError => Update({...state, hasLoadError: true})
-      | ToggleAddDialog =>
-        Update({...state, addDialogOpen: ! state.addDialogOpen})
-      | ToggleEditDialog(editCompany) =>
-        Update({...state, editCompany})
-      | AddCompany(company) =>
-        Update({
-          ...state,
-          companies: Company.append(state.companies, company)
-        })
-      | EditCompany(company) =>
-        Update({
-          ...state,
-          companies: Company.replace(state.companies, company)
-        })
-      | RemoveCompany(removedId) =>
-        Update({
-          ...state,
-          companies: Company.removeWithId(state.companies, removedId)
-        })
-      }
-    /* This is the edit dialog */
-  };
+            data={state.editCompany}
+          />
+        </Blueprintjs.Dialog>
+      </div>;
 };

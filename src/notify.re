@@ -1,16 +1,16 @@
 open Blueprintjs;
 
-let toasterProps = ToasterProps.create(~position=Position.BOTTOM, ());
+let toasterProps = ToasterProps.create(~position=Some(Position.BOTTOM), ());
 
 let toaster = Toaster.create(toasterProps);
 
-let showError = (text) => {
+let showError = text => {
   let props =
     ToastProps.create(
-      ~message=Utils.textEl(text),
-      ~iconName="warning-sign",
-      ~intent=Intent.DANGER,
-      ()
+      ~message=React.string(text),
+      ~iconName=Some("warning-sign"),
+      ~intent=Some(Intent.DANGER),
+      (),
     );
-  IToaster.show(toaster, props)
+  IToaster.show(toaster, props);
 };

@@ -18,7 +18,7 @@ module Company = {
 
 let getRoute = path =>
   /* TODO - make "pattern matching" so that you don't have to define urls twice in this file */
-  switch path {
+  switch (path) {
   | ["companies", id] => Company(int_of_string(id))
   | ["companies"] => Companies
   | [] => Home

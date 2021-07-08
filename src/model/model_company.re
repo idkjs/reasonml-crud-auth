@@ -1,6 +1,6 @@
 type t = {
   id: option(int),
-  name: string
+  name: string,
   /* location: string,
      address: string,
      youtube: string,
@@ -21,7 +21,7 @@ module Decode = {
   let company = json =>
     Json.Decode.{
       id: json |> optional(field("id", int)),
-      name: json |> field("name", string)
+      name: json |> field("name", string),
       /* location: json |> field("location", string),
          address: json |> field("address", string),
          youtube: json |> field("youtube", string),
@@ -48,17 +48,15 @@ module Decode = {
 module Encode = {
   let company = companyObj =>
     Json.Encode.(
-      object_
-        ([
-          (
-            "id",
-            switch companyObj.id {
-            | Some(id) => int(id)
-            | None => null
-            }
-          ),
-          ("name", string(companyObj.name))
-        ])
+      object_([
+        (
+          "id",
+          switch (companyObj.id) {
+          | Some(id) => int(id)
+          | None => null
+          },
+        ),
+        ("name", string(companyObj.name)),
         /* ("location", string(companyObj.location)),
            ("address", string(companyObj.address)),
            ("youtube", string(companyObj.youtube)),
@@ -73,6 +71,7 @@ module Encode = {
            ("employees", string(companyObj.employees)),
            ("description", string(companyObj.description)),
            ("url", string(companyObj.url)) */
+      ])
     );
 };
 
@@ -117,7 +116,7 @@ module Api = {
     Js.Promise.(
       Fetch.fetchWithInit(
         companyUrl(id),
-        Fetch.RequestInit.make(~method_=Delete, ())
+        Fetch.RequestInit.make(~method_=Delete, ()),
       )
       |> then_(Common.Response.statusOk)
     );
@@ -131,8 +130,8 @@ let replace = (companies, company: t) =>
   Some(
     Array.map(
       c => c.id === company.id ? {...company, id: c.id} : c,
-      Utils.optToArrayOrEmpty(companies)
-    )
+      Utils.optToArrayOrEmpty(companies),
+    ),
   );
 
 let removeWithId = (companies, id) => {
@@ -140,7 +139,7 @@ let removeWithId = (companies, id) => {
   let filteredList =
     List.filter(
       company => Utils.optIntOrRaise(company.id) !== id,
-      companyList
+      companyList,
     );
   Some(Array.of_list(filteredList));
 };

@@ -1,7 +1,7 @@
 open Utils;
 
 requireCSS("./index.css");
-
+// %raw{|import "@blueprintjs/core/dist/blueprint.css"|}
 registerServiceWorker();
 
 // ReactDOM.renderToElementWithId(<App />, "root");

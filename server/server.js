@@ -1,11 +1,10 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const companies = require("./companies");
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({extended: true}));
+app.use(express.json())
 
 app
   .route("/api/companies")
@@ -24,4 +23,4 @@ app.use(function(req, res) {
 
 app.listen(port);
 
-console.log("ReasonML CRUD example API server started on: " + port);
+console.log("ReasonML CRUD example API server started on: http://localhost:" + port);

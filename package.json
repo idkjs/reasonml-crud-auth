@@ -4,19 +4,13 @@
   "license": "MIT",
   "url": "https://github.com/idkjs/reasonml-crud-auth",
   "proxy": "http://localhost:3001/",
-  "author": "Alain Armand, @_idkjs, https://github.com/idkjs",
+  "author": "idkjs",
   "keywords": [ "reasonml", "reason-react", "lokijs", "database", "blueprintjs", "crud", "bs-json" ],
-  "dependencies": {
-    "@blueprintjs/core": "^3.46.0",
-    "@glennsl/bs-json": "^5.0.4",
-    "bs-fetch": "^0.6.2",
-    "css-loader": "^5.2.6",
-    "react": "^17.0.2",
-    "react-addons-css-transition-group": "^15.6.2",
-    "react-dom": "^17.0.2",
-    "reason-scripts": "1.0.0"
-  },
+
   "scripts": {
+
+    "dev": "node ./bundle.js",
+    "bundle": "esbuild ./src/index.bs.js --outfile=www/js/bundle.js --bundle --sourcemap --target=chrome58,firefox57,safari11,edge16 --define:process.env.NODE_ENV='\"development\"'",
     "format": "find ./src -iname '*.re' | xargs bsrefmt --in-place && find ./src -iname '*.rei' | xargs bsrefmt -i true --in-place",
     "clean": "bsb -clean-world",
     "build:bs": "bsb -make-world",
@@ -28,14 +22,32 @@
     "prepare": "npm run build:bs",
     "server": "node ./server/server.js",
     "server:dev": "nodemon ./server/server.js",
-    "dev": "concurrently --kill-others-on-fail \"yarn server:dev\" \"yarn start\""
+    "dev2": "concurrently --kill-others-on-fail \"yarn server:dev\" \"yarn start\""
+  },
+  "dependencies": {
+    "@blueprintjs/core": "^3.46.0",
+    "@blueprintjs/icons": "^3.27.0",
+    "@glennsl/bs-json": "^5.0.4",
+    "bs-fetch": "^0.6.2",
+    "css-loader": "^5.2.6",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "reason-scripts": "1.0.0"
   },
   "devDependencies": {
-    "body-parser": "^1.19.0",
     "@glennsl/bs-jest": "^0.7.0",
+    "@rescript/react": "^0.10.3",
     "concurrently": "^6.2.0",
+    "esbuild": "^0.12.15",
+    "esbuild-sass-plugin": "^1.4.8",
     "express": "^4.17.1",
-    "lokijs": "^1.5.12",
-    "@rescript/react": "^0.10.3"
+    "lokijs": "^1.5.12"
+  },
+  "browserslist": [ ">0.2%", "not dead", "not ie <= 11", "not op_mini all" ],
+  "browser": {
+    "fs": false,
+    "tty": false,
+    "constants": false,
+    "child_process": false
   }
 }

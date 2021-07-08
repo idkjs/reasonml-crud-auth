@@ -480,8 +480,8 @@ module ToasterProps = {
 };
 
 module Toaster = {
-  [@bs.module "@blueprintjs/core"] [@bs.scope "Toaster"]
-  external create: ToasterProps.t => IToaster.t = "default";
+  [@bs.module "@blueprintjs/core"]
+  external create: ToasterProps.t => IToaster.t = "Toaster";
 
   [@bs.module "@blueprintjs/core"] [@react.component]
   external make:

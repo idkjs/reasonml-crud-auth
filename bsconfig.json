@@ -7,16 +7,15 @@
     }
   ],
   "bs-dependencies": [
-    "reason-react",
-    "bs-jest",
+    "@rescript/react",
+    "@glennsl/bs-jest",
     "@glennsl/bs-json",
     "bs-fetch"
   ],
   "reason": {
-    "react-jsx": 2
+    "react-jsx": 3
   },
   "bsc-flags": [
     "-bs-super-errors"
-  ],
-  "refmt": 3
+  ]
 }

@@ -5,15 +5,7 @@
   "url": "https://github.com/idkjs/reasonml-crud-auth",
   "proxy": "http://localhost:3001/",
   "author": "Alain Armand, @_idkjs, https://github.com/idkjs",
-  "keywords": [
-    "reasonml",
-    "reason-react",
-    "lokijs",
-    "database",
-    "blueprintjs",
-    "crud",
-    "bs-json"
-  ],
+  "keywords": [ "reasonml", "reason-react", "lokijs", "database", "blueprintjs", "crud", "bs-json" ],
   "dependencies": {
     "@blueprintjs/core": "^3.46.0",
     "@glennsl/bs-json": "^5.0.4",
@@ -25,19 +17,21 @@
     "reason-scripts": "1.0.0"
   },
   "scripts": {
+    "clean": "bsb -clean-world",
+    "build:bs": "bsb -make-world",
+    "watch": "bsb -make-world -w",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "prepare": "npm link bs-platform",
+    "prepare": "npm build:bs",
     "server": "node ./server/server.js",
     "server:dev": "nodemon ./server/server.js",
-    "dev":
-      "concurrently --kill-others-on-fail \"yarn server:dev\" \"yarn start\""
+    "dev": "concurrently --kill-others-on-fail \"yarn server:dev\" \"yarn start\""
   },
   "devDependencies": {
     "body-parser": "^1.19.0",
-    "bs-jest": "^0.3.2",
+    "@glennsl/bs-jest": "^0.7.0",
     "concurrently": "^6.2.0",
     "express": "^4.17.1",
     "lokijs": "^1.5.12",

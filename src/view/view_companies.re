@@ -51,7 +51,7 @@ module CompanyDialog = {
           inline=true
           helperText=(
             state.hasError ?
-              textEl("Enter valid company name") : ReasonReact.null
+              textEl("Enter valid company name") : React.null
           )
           required=true>
           <Blueprintjs.InputGroup
@@ -291,7 +291,7 @@ let make = () => {
                   (textEl("Add company"))
                 </Blueprintjs.Button>
               </div> :
-              ReasonReact.null
+              React.null
           )
           <div> companiesContent </div>
           <Blueprintjs.Dialog

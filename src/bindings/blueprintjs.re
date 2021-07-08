@@ -5,7 +5,7 @@ external toJsUnsafe : 'a => jsUnsafe = "%identity";
 let unwrapValue =
   fun
   | `String(s) => toJsUnsafe(s)
-  | `Bool(b) => toJsUnsafe(Js.Boolean.to_js_boolean(b))
+  | `Bool(b) => toJsUnsafe( (b))
   | `Float(f) => toJsUnsafe(f)
   | `Date(d) => toJsUnsafe(d)
   | `Callback(c) => toJsUnsafe(c)
@@ -62,9 +62,9 @@ module ButtonType = {
 };
 
 module Navbar = {
-  [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "Navbar";
+  [@bs.module "@blueprintjs/core"] external reactClass : React.reactClass = "Navbar";
   let make = (~className: option(string)=?, ~children) =>
-    ReasonReact.wrapJsForReason(
+    React.wrapJsForReason(
       ~reactClass,
       ~props={"className": Js.Nullable.from_opt(className)},
       children
@@ -72,9 +72,9 @@ module Navbar = {
 };
 
 module NavbarGroup = {
-  [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "NavbarGroup";
+  [@bs.module "@blueprintjs/core"] external reactClass : React.reactClass = "NavbarGroup";
   let make = (~className: option(string)=?, ~align: option(NavbarAlign.t)=?, ~children) =>
-    ReasonReact.wrapJsForReason(
+    React.wrapJsForReason(
       ~reactClass,
       ~props={
         "className": Js.Nullable.from_opt(className),
@@ -85,9 +85,9 @@ module NavbarGroup = {
 };
 
 module NavbarHeading = {
-  [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "NavbarHeading";
+  [@bs.module "@blueprintjs/core"] external reactClass : React.reactClass = "NavbarHeading";
   let make = (~className: option(string)=?, ~children) =>
-    ReasonReact.wrapJsForReason(
+    React.wrapJsForReason(
       ~reactClass,
       ~props={"className": Js.Nullable.from_opt(className)},
       children
@@ -95,7 +95,7 @@ module NavbarHeading = {
 };
 
 module Button = {
-  [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "Button";
+  [@bs.module "@blueprintjs/core"] external reactClass : React.reactClass = "Button";
   let make =
       (
         ~active: option(bool)=?,
@@ -105,22 +105,22 @@ module Button = {
         ~iconName: option(string)=?,
         ~intent: option(Intent.t)=?,
         ~loading: option(bool)=?,
-        ~onClick: option(ReasonReact.Callback.t(ReactEvent.Mouse.t))=?,
+        ~onClick: option(React.Callback.t(ReactEvent.Mouse.t))=?,
         ~rightIconName: option(string)=?,
         ~text: option(string)=?,
         ~buttonType: option(ButtonType.t)=?,
         children
       ) =>
-    ReasonReact.wrapJsForReason(
+    React.wrapJsForReason(
       ~reactClass,
       ~props={
-        "active": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, active)),
+        "active": Js.Nullable.from_opt(optionMap( , active)),
         "className": Js.Nullable.from_opt(className),
-        "disabled": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, disabled)),
+        "disabled": Js.Nullable.from_opt(optionMap( , disabled)),
         "elementRef": Js.Nullable.from_opt(elementRef),
         "iconName": Js.Nullable.from_opt(iconName),
         "intent": Js.Nullable.from_opt(optionMap(Intent.toInt, intent)),
-        "loading": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, loading)),
+        "loading": Js.Nullable.from_opt(optionMap( , loading)),
         "onClick": Js.Nullable.from_opt(onClick),
         "rightIconName": Js.Nullable.from_opt(rightIconName),
         "text": Js.Nullable.from_opt(text),
@@ -131,9 +131,9 @@ module Button = {
 };
 
 module NavbarDivider = {
-  [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "NavbarDivider";
+  [@bs.module "@blueprintjs/core"] external reactClass : React.reactClass = "NavbarDivider";
   let make = (~className: option(string)=?, ~children) =>
-    ReasonReact.wrapJsForReason(
+    React.wrapJsForReason(
       ~reactClass,
       ~props={"className": Js.Nullable.from_opt(className)},
       children
@@ -141,7 +141,7 @@ module NavbarDivider = {
 };
 
 module Tabs = {
-  [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "Tabs2";
+  [@bs.module "@blueprintjs/core"] external reactClass : React.reactClass = "Tabs2";
   type onChangeEvent = {
     newTab: string,
     oldTab: string,
@@ -155,10 +155,10 @@ module Tabs = {
         ~onChange: option(((string, string, ReactEvent.Mouse.t) => unit))=?,
         children
       ) =>
-    ReasonReact.wrapJsForReason(
+    React.wrapJsForReason(
       ~reactClass,
       ~props={
-        "animate": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, animate)),
+        "animate": Js.Nullable.from_opt(optionMap( , animate)),
         "className": Js.Nullable.from_opt(className),
         "id": id,
         "onChange": Js.Nullable.from_opt(onChange)
@@ -168,7 +168,7 @@ module Tabs = {
 };
 
 module Tab = {
-  [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "Tab2";
+  [@bs.module "@blueprintjs/core"] external reactClass : React.reactClass = "Tab2";
   let make =
       (
         ~className: option(string)=?,
@@ -177,7 +177,7 @@ module Tab = {
         ~panel: option(React.element)=?,
         children
       ) =>
-    ReasonReact.wrapJsForReason(
+    React.wrapJsForReason(
       ~reactClass,
       ~props={
         "className": Js.Nullable.from_opt(className),
@@ -190,7 +190,7 @@ module Tab = {
 };
 
 module Dialog = {
-  [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "Dialog";
+  [@bs.module "@blueprintjs/core"] external reactClass : React.reactClass = "Dialog";
   let make =
       (
         ~isOpen: bool,
@@ -206,32 +206,32 @@ module Dialog = {
         ~inline: option(bool)=?,
         ~isCloseButtonShown: option(bool)=?,
         ~_lazy: option(bool)=?,
-        ~onClose: option(ReasonReact.Callback.t('t))=?,
+        ~onClose: option(React.Callback.t('t))=?,
         ~style: option(ReactDOM.style)=?,
         ~title: option(React.element)=?, /* TODO: can be also string */
         ~transitionDuration: option(int)=?,
         ~transitionName: option(string)=?,
         children
       ) =>
-    ReasonReact.wrapJsForReason(
+    React.wrapJsForReason(
       ~reactClass,
       ~props={
-        "isOpen": Js.Boolean.to_js_boolean(isOpen),
-        "autoFocus": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, autoFocus)),
+        "isOpen":  (isOpen),
+        "autoFocus": Js.Nullable.from_opt(optionMap( , autoFocus)),
         "backdropClassName": Js.Nullable.from_opt(backdropClassName),
         "backdropProps": Js.Nullable.from_opt(backdropProps),
         "canEscapeKeyClose":
-          Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, canEscapeKeyClose)),
+          Js.Nullable.from_opt(optionMap( , canEscapeKeyClose)),
         "canOutsideClickClose":
-          Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, canOutsideClickClose)),
+          Js.Nullable.from_opt(optionMap( , canOutsideClickClose)),
         "className": Js.Nullable.from_opt(className),
-        "enforceFocus": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, enforceFocus)),
-        "hasBackdrop": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, hasBackdrop)),
+        "enforceFocus": Js.Nullable.from_opt(optionMap( , enforceFocus)),
+        "hasBackdrop": Js.Nullable.from_opt(optionMap( , hasBackdrop)),
         "iconName": Js.Nullable.from_opt(iconName),
-        "inline": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, inline)),
+        "inline": Js.Nullable.from_opt(optionMap( , inline)),
         "isCloseButtonShown":
-          Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, isCloseButtonShown)),
-        "lazy": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, _lazy)),
+          Js.Nullable.from_opt(optionMap( , isCloseButtonShown)),
+        "lazy": Js.Nullable.from_opt(optionMap( , _lazy)),
         "onClose": Js.Nullable.from_opt(onClose),
         "style": Js.Nullable.from_opt(style),
         "title": Js.Nullable.from_opt(title),
@@ -243,7 +243,7 @@ module Dialog = {
 };
 
 module Label = {
-  [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "Label";
+  [@bs.module "@blueprintjs/core"] external reactClass : React.reactClass = "Label";
   let make =
       (
         ~text: string,
@@ -253,13 +253,13 @@ module Label = {
         ~required: option(bool)=?,
         children
       ) =>
-    ReasonReact.wrapJsForReason(
+    React.wrapJsForReason(
       ~reactClass,
       ~props={
         "text": text,
         "className": Js.Nullable.from_opt(className),
-        "disabled": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, disabled)),
-        "required": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, required)),
+        "disabled": Js.Nullable.from_opt(optionMap( , disabled)),
+        "required": Js.Nullable.from_opt(optionMap( , required)),
         "helperText": Js.Nullable.from_opt(helperText)
       },
       children
@@ -267,7 +267,7 @@ module Label = {
 };
 
 module FormGroup = {
-  [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "FormGroup";
+  [@bs.module "@blueprintjs/core"] external reactClass : React.reactClass = "FormGroup";
   let make =
       (
         ~className: option(string)=?,
@@ -281,25 +281,25 @@ module FormGroup = {
         ~required: option(bool)=?,
         children
       ) =>
-    ReasonReact.wrapJsForReason(
+    React.wrapJsForReason(
       ~reactClass,
       ~props={
         "className": Js.Nullable.from_opt(className),
-        "disabled": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, disabled)),
+        "disabled": Js.Nullable.from_opt(optionMap( , disabled)),
         "helperText": Js.Nullable.from_opt(helperText),
-        "inline": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, inline)),
+        "inline": Js.Nullable.from_opt(optionMap( , inline)),
         "intent": Js.Nullable.from_opt(optionMap(Intent.toInt, intent)),
         "label": Js.Nullable.from_opt(label),
         "labelFor": Js.Nullable.from_opt(labelFor),
         "requiredLabel": Js.Nullable.from_opt(optionMap(unwrapValue, requiredLabel)),
-        "required": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, required))
+        "required": Js.Nullable.from_opt(optionMap( , required))
       },
       children
     );
 };
 
 module InputGroup = {
-  [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "InputGroup";
+  [@bs.module "@blueprintjs/core"] external reactClass : React.reactClass = "InputGroup";
   let make =
       (
         ~id: option(string)=?,
@@ -309,20 +309,20 @@ module InputGroup = {
         ~inputRef: option(React.element)=?,
         ~intent: option(Intent.t)=?,
         ~leftIconName: option(string)=?,
-        ~onChange: option(ReasonReact.Callback.t('t))=?,
+        ~onChange: option(React.Callback.t('t))=?,
         ~placeholder: option(string)=?,
         ~rightElement: option(React.element)=?,
         ~_type: option(string)=?,
         ~value: option(string)=?,
         children
       ) =>
-    ReasonReact.wrapJsForReason(
+    React.wrapJsForReason(
       ~reactClass,
       ~props={
         "id": Js.Nullable.from_opt(id),
         "className": Js.Nullable.from_opt(className),
         "defaultValue": Js.Nullable.from_opt(defaultValue),
-        "disabled": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, disabled)),
+        "disabled": Js.Nullable.from_opt(optionMap( , disabled)),
         "inputRef": Js.Nullable.from_opt(inputRef),
         "intent": Js.Nullable.from_opt(optionMap(Intent.toInt, intent)),
         "leftIconName": Js.Nullable.from_opt(leftIconName),
@@ -336,7 +336,7 @@ module InputGroup = {
     );
 };
 module Spinner = {
-  [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "Spinner";
+  [@bs.module "@blueprintjs/core"] external reactClass : React.reactClass = "Spinner";
   let make =
       (
         ~className: option(string)=?,
@@ -344,7 +344,7 @@ module Spinner = {
         ~value: option(int)=?,
         children
       ) =>
-    ReasonReact.wrapJsForReason(
+    React.wrapJsForReason(
       ~reactClass,
       ~props={
         "className": Js.Nullable.from_opt(className),
@@ -408,7 +408,7 @@ module ActionProps = {
     "iconName": option(string),  /* TODO - define IconName type */
 
     /** Click event handler. */
-    "onClick": option(ReasonReact.Callback.t(ReactEvent.Mouse.t)),
+    "onClick": option(React.Callback.t(ReactEvent.Mouse.t)),
     
     /** Action text. */
     "text": option(string),
@@ -445,7 +445,7 @@ module ToastProps = {
        * Callback invoked when the toast is dismissed, either by the user or by the timeout.
        * The value of the argument indicates whether the toast was closed because the timeout expired.
        */
-    "onDismiss": Js.Nullable.t(ReasonReact.Callback.t(bool)),
+    "onDismiss": Js.Nullable.t(React.Callback.t(bool)),
 
       /**
        * Milliseconds to wait before automatically dismissing toast.
@@ -461,7 +461,7 @@ module ToastProps = {
           ~action: option(ActionProps.t)=?,
           ~intent: option(Intent.t)=?,
           ~iconName: option(string)=?, 
-          ~onDismiss: option(ReasonReact.Callback.t(bool))=?, 
+          ~onDismiss: option(React.Callback.t(bool))=?, 
           ~timeout: option(int)=?,
           ()
         ) => {
@@ -520,10 +520,10 @@ module ToasterProps = {
         ()
       ) => {
         {
-          "autoFocus": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, autoFocus)),
-          "canEscapeKeyClear": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, canEscapeKeyClear)),
+          "autoFocus": Js.Nullable.from_opt(optionMap( , autoFocus)),
+          "canEscapeKeyClear": Js.Nullable.from_opt(optionMap( , canEscapeKeyClear)),
           "className": Js.Nullable.from_opt(className),
-          "inline": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, inline)),
+          "inline": Js.Nullable.from_opt(optionMap( , inline)),
           "position": Js.Nullable.from_opt(optionMap(Position.toInt, position))
         }
       }
@@ -532,7 +532,7 @@ module ToasterProps = {
 module Toaster = {
   [@bs.module "@blueprintjs/core"][@bs.scope "Toaster"] external create : (ToasterProps.t) => IToaster.t = "";
 
-  [@bs.module "@blueprintjs/core"] external reactClass : ReasonReact.reactClass = "Toaster";
+  [@bs.module "@blueprintjs/core"] external reactClass : React.reactClass = "Toaster";
   let make =
       (
         ~autoFocus: option(bool)=?,
@@ -540,17 +540,17 @@ module Toaster = {
         ~className: option(string)=?,
         ~inline: option(bool)=?,
         ~position: option(Position.t)=?,
-        ~_ref: option(ReasonReact.reactRef)=?,
+        ~_ref: option(React.reactRef)=?,
         children
       ) =>
-    ReasonReact.wrapJsForReason(
+    React.wrapJsForReason(
       ~reactClass,
       ~props={
-        "autoFocus": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, autoFocus)),
+        "autoFocus": Js.Nullable.from_opt(optionMap( , autoFocus)),
         "canEscapeKeyClear":
-          Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, canEscapeKeyClear)),
+          Js.Nullable.from_opt(optionMap( , canEscapeKeyClear)),
         "className": Js.Nullable.from_opt(className),
-        "inline": Js.Nullable.from_opt(optionMap(Js.Boolean.to_js_boolean, inline)),
+        "inline": Js.Nullable.from_opt(optionMap( , inline)),
         "position": Js.Nullable.from_opt(optionMap(Position.toInt, position)),
         "ref": Js.Nullable.from_opt(_ref)
       },

@@ -13,7 +13,7 @@ let intEl = (n) => n |> string_of_int |> React.string;
 let optIntEl = (n) =>
   switch n {
   | Some(n) => intEl(n)
-  | None => ReasonReact.null
+  | None => React.null
   };
 
 let textEl = React.string;

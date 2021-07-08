@@ -25,9 +25,9 @@ let make = (~route: Routes.t, ~className=?, ~children) => {
       let handleClick = (event: ReactEvent.Mouse.t) =>
         if (isLinkEvent(event)) {
           ReactEvent.Mouse.preventDefault(event);
-          ReasonReact.Router.push(url);
+          ReasonReactRouter.push(url);
         };
-      ReasonReact.createDomElement(
+      React.createDomElement(
         "a",
         ~props={
           "className": Utils.optStringOrEmpty(className),

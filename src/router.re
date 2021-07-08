@@ -9,15 +9,15 @@ let getPageFromPath = path => {
 };
 
 let getInitialPage = () =>
-  getPageFromPath(ReasonReact.Router.dangerouslyGetInitialUrl().path);
+  getPageFromPath(ReasonReactRouter.dangerouslyGetInitialUrl().path);
 
 let init = pageChanged => {
   let watchId =
-    ReasonReact.Router.watchUrl(url => {
+    ReasonReactRouter.watchUrl(url => {
       let page = getPageFromPath(url.path);
       pageChanged(page);
     });
   watchId;
 };
 
-let destroy = ReasonReact.Router.unwatchUrl;
+let destroy = ReasonReactRouter.unwatchUrl;
